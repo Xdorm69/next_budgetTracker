@@ -164,7 +164,7 @@ const TransactionTable = ({ from, to }: { from: Date; to: Date }) => {
     },
     initialState: {
       pagination: {
-        pageSize: 6,
+        pageSize: 5,
       },
     },
     getPaginationRowModel: getPaginationRowModel(),

@@ -40,7 +40,7 @@ const TransactionsPage = () => {
           />
         </div>
       </div>
-      <div className="container">
+      <div className="container mb-10">
         <TransactionTable from={dateRange.from} to={dateRange.to} />
       </div>
     </>
