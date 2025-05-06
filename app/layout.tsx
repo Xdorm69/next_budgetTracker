@@ -4,6 +4,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import RootProvider from "@/components/providers/RootProvider";
 import { Toaster } from "@/components/ui/sonner";
+import { Analytics } from "@vercel/analytics/react";
 
 
 
@@ -32,7 +33,7 @@ export default function RootLayout({
       <html lang="en" className="dark" style={{ colorScheme: "dark" }}>
         <body className={`${geistSans.variable} ${geistMono.variable}`}>
           <Toaster richColors position="bottom-right" />
-          <RootProvider>{children}</RootProvider>
+          <RootProvider>{children}<Analytics/></RootProvider>
         </body>
       </html>
     </ClerkProvider>
