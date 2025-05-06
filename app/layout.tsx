@@ -5,6 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import RootProvider from "@/components/providers/RootProvider";
 import { Toaster } from "@/components/ui/sonner";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 
 
@@ -35,6 +36,7 @@ export default function RootLayout({
           <Toaster richColors position="bottom-right" />
           <RootProvider>{children}</RootProvider>
           <Analytics />
+          <SpeedInsights/>
         </body>
       </html>
     </ClerkProvider>
