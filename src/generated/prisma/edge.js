@@ -83,6 +83,9 @@ Prisma.NullTypes = {
  * Enums
  */
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
+  ReadUncommitted: 'ReadUncommitted',
+  ReadCommitted: 'ReadCommitted',
+  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 });
 
@@ -134,6 +137,11 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+};
+
 
 exports.Prisma.ModelName = {
   UserSettings: 'UserSettings',
@@ -171,7 +179,8 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null
+    "rootEnvPath": null,
+    "schemaEnvPath": "../../../.env"
   },
   "relativePath": "../../../prisma",
   "clientVersion": "6.6.0",
@@ -179,18 +188,18 @@ const config = {
   "datasourceNames": [
     "db"
   ],
-  "activeProvider": "sqlite",
+  "activeProvider": "postgresql",
   "inlineDatasources": {
     "db": {
       "url": {
-        "fromEnvVar": null,
-        "value": "file:./dev.db"
+        "fromEnvVar": "DATABASE_URL",
+        "value": "prisma+postgres://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiYzg0ZGI0MDAtMTIxYi00YmJiLWE1MTItYzdhNGE4MDRkNDgxIiwidGVuYW50X2lkIjoiOWI1NjdiYzg2MjlmNjk3ZGFmZTc4NzhlNDNmYjY5ODI1MGUyZTdiMDYwOTAwODljNGI5ODk4OWRjZTQ3MTBmZiIsImludGVybmFsX3NlY3JldCI6ImZiY2UyMjNkLTU2OGItNGFiZi04YTUyLTk4MGZiZWMwMWNjYyJ9.m-6aHEyWaJcjCvWon_vXaoCx2_UhgC560f2NJKJyGgA"
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n  url      = \"file:./dev.db\"\n}\n\nmodel UserSettings {\n  userId   String @id\n  currency String\n}\n\nmodel Category {\n  createdAt DateTime @default(now())\n  name      String\n  userId    String\n  icon      String\n  type      String   @default(\"income\")\n\n  @@unique([name, userId, type])\n}\n\nmodel Transaction {\n  id           String   @id @default(uuid())\n  createdAt    DateTime @default(now())\n  updatedAt    DateTime @default(now())\n  amount       Float\n  description  String\n  date         DateTime\n  userId       String\n  type         String   @default(\"income\")\n  category     String\n  categoryIcon String\n}\n\nmodel MonthHistory {\n  userId  String\n  day     Int\n  month   Int\n  year    Int\n  income  Float\n  expense Float\n\n  @@id([day, month, year, userId])\n}\n\nmodel YearHistory {\n  userId  String\n  month   Int\n  year    Int\n  income  Float\n  expense Float\n\n  @@id([month, year, userId])\n}\n",
-  "inlineSchemaHash": "b1a1767d20ac35a6e358a52f22c8e26e7bd0dd058fd1d0de81756462fbec4568",
-  "copyEngine": true
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel UserSettings {\n  userId   String @id\n  currency String\n}\n\nmodel Category {\n  createdAt DateTime @default(now())\n  name      String\n  userId    String\n  icon      String\n  type      String   @default(\"income\")\n\n  @@unique([name, userId, type])\n}\n\nmodel Transaction {\n  id           String   @id @default(uuid())\n  createdAt    DateTime @default(now())\n  updatedAt    DateTime @default(now())\n  amount       Float\n  description  String\n  date         DateTime\n  userId       String\n  type         String   @default(\"income\")\n  category     String\n  categoryIcon String\n}\n\nmodel MonthHistory {\n  userId  String\n  day     Int\n  month   Int\n  year    Int\n  income  Float\n  expense Float\n\n  @@id([day, month, year, userId])\n}\n\nmodel YearHistory {\n  userId  String\n  month   Int\n  year    Int\n  income  Float\n  expense Float\n\n  @@id([month, year, userId])\n}\n",
+  "inlineSchemaHash": "df482b9b6a9c36cf584500a60137588b335ea552e201452f4ce175d5775910b5",
+  "copyEngine": false
 }
 config.dirname = '/'
 
@@ -200,7 +209,9 @@ config.engineWasm = undefined
 config.compilerWasm = undefined
 
 config.injectableEdgeEnv = () => ({
-  parsed: {}
+  parsed: {
+    DATABASE_URL: typeof globalThis !== 'undefined' && globalThis['DATABASE_URL'] || typeof process !== 'undefined' && process.env && process.env.DATABASE_URL || undefined
+  }
 })
 
 if (typeof globalThis !== 'undefined' && globalThis['DEBUG'] || typeof process !== 'undefined' && process.env && process.env.DEBUG || undefined) {
