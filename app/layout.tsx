@@ -33,7 +33,8 @@ export default function RootLayout({
       <html lang="en" className="dark" style={{ colorScheme: "dark" }}>
         <body className={`${geistSans.variable} ${geistMono.variable}`}>
           <Toaster richColors position="bottom-right" />
-          <RootProvider>{children}<Analytics/></RootProvider>
+          <RootProvider>{children}</RootProvider>
+          <Analytics />
         </body>
       </html>
     </ClerkProvider>
