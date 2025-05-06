@@ -98,7 +98,7 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
   align = "end",
   locale = "en-US",
   showCompare = true,
-}): JSX.Element => {
+}): React.ReactElement => {
   const [isOpen, setIsOpen] = useState(false);
 
   const [range, setRange] = useState<DateRange>({
