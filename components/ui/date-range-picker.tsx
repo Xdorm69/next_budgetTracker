@@ -299,7 +299,7 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
     preset: string;
     label: string;
     isSelected: boolean;
-  }): JSX.Element => (
+  }) => (
     <Button
       className={cn(isSelected && "pointer-events-none")}
       variant="ghost"
